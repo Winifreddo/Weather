@@ -45,6 +45,22 @@ inputDay.innerHTML = `${day}`;
 let inputDate = document.querySelector("#date");
 inputDate.innerHTML = `${date} ${month}, ${year}`;
 
+function formatHours(timestamp) {
+  let now = new Date(timestamp);
+  let hour = now.getHours();
+  if (hour < 10) {
+    hour = `0${hour}`;
+  }
+  let year = now.getFullYear();
+  let date = now.getDate();
+  let minutes = now.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  return `${hour}:${minutes}`;
+  
+}
+
 function showTemp(response) {
   document.querySelector("#city").innerHTML = response.data.name;
   let temp = Math.round(response.data.main.temp);
@@ -59,6 +75,24 @@ function showTemp(response) {
   let speed = response.data.wind.speed;
   document.querySelector("#wind").innerHTML = `Wind: ${speed} km/h`;
 }
+function showForecast(response) { 
+
+  let forecastElement = document.querySelector("#forecasting");
+  let forecast = (response.data.list[0]);
+  console.log (forecast);
+
+  forecastElement.innerHTML = `<div class="col-2">
+  <h4> 
+     ${formatHours(forecast.dt*1000)}
+</h4>
+<img 
+src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+<div id="weather-forecast">
+<strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
+</div>
+    </div>`
+ 
+}
 
 function search(event) {
   event.preventDefault();
@@ -66,9 +100,14 @@ function search(event) {
   let unit = "units=metric";
   let apiKey = "91a2969663631e6bc0bf8b6ad1300fee";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&${unit}`;
+ 
   axios.get(apiUrl).then(showTemp);
+
+  apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&${unit}`;
+  axios.get(apiUrl).then(showForecast);
 }
 
 let formSearch = document.querySelector("#search-form");
 
 formSearch.addEventListener("submit", search);
+
