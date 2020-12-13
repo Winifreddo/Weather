@@ -60,11 +60,19 @@ function formatHours(timestamp) {
   return `${hour}:${minutes}`;
   
 }
+function showIcon(response){
+  let icon = (response.data.weather[0].icon);
+  document.querySelector("#icon-now").innerHTML = `<img 
+  src ="http://openweathermap.org/img/wn/${icon}@2x.png"
+  />`;
+}
 
 function showTemp(response) {
+  
+  
   document.querySelector("#city").innerHTML = response.data.name;
   let temp = Math.round(response.data.main.temp);
-  document.querySelector("#temperature").innerHTML = `${temp}°C 🌡`;
+  document.querySelector("#temperature").innerHTML = `${temp}°C`;
 
   let humid = Math.round(response.data.main.humidity);
   document.querySelector("#humidity").innerHTML = `Humidity: ${humid}%`;
@@ -74,12 +82,14 @@ function showTemp(response) {
 
   let speed = response.data.wind.speed;
   document.querySelector("#wind").innerHTML = `Wind: ${speed} km/h`;
+
 }
 function showForecast(response) { 
 
   let forecastElement = document.querySelector("#forecasting");
   let forecast = (response.data.list[0]);
-  console.log (forecast);
+  let icon = (response);
+ 
 
   forecastElement.innerHTML = `<div class="col-2">
   <h4> 
@@ -87,6 +97,7 @@ function showForecast(response) {
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -98,6 +109,7 @@ src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -109,6 +121,7 @@ src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -120,6 +133,7 @@ src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -131,6 +145,7 @@ src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -142,6 +157,7 @@ src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
 </h4>
 <img 
 src ="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png"
+/>
 <div id="weather-forecast">
 <strong>${Math.round(forecast.main.temp_max)}°</strong>${Math.round(forecast.main.temp_min)}°
 </div>
@@ -156,9 +172,12 @@ function search(event) {
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&${unit}`;
  
   axios.get(apiUrl).then(showTemp);
+axios.get(apiUrl).then(showIcon);
 
   apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&${unit}`;
   axios.get(apiUrl).then(showForecast);
+
+  
 }
 
 let formSearch = document.querySelector("#search-form");
